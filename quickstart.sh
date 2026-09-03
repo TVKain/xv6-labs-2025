@@ -72,11 +72,25 @@ echo "Step 6: Testing xv6 with QEMU (10 second timeout)..."
 echo "The kernel should boot and show 'xv6 kernel is booting' message."
 echo ""
 
-# Run QEMU with timeout to test boot
-timeout 10 make qemu || true
+# Run QEMU with timeout to test boot, capture output
+timeout 10 make qemu > /tmp/xv6_test_output.txt 2>&1 || true
+
+# Small delay to ensure QEMU has fully terminated
+sleep 1
+
 echo ""
 echo "QEMU test completed (timed out after 10 seconds - this is expected)"
-echo "If you saw 'xv6 kernel is booting' above, the installation is successful!"
+
+# Check if kernel booted successfully
+if grep -q "xv6 kernel is booting" /tmp/xv6_test_output.txt; then
+    echo "✓ Installation successful! Kernel booted properly."
+else
+    echo "⚠ Warning: Kernel may not have booted successfully."
+    echo "Check the output above for errors."
+fi
+
+# Clean up
+rm -f /tmp/xv6_test_output.txt
 
 echo ""
 echo "=========================================="
