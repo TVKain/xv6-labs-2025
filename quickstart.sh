@@ -4,7 +4,7 @@
 # This script automates the installation and setup of xv6-labs-2025
 # Verified on WSL2 environment with Ubuntu 26.04 LTS
 
-set -e  # Exit on any error
+# set -e  # Exit on any error - removed to allow QEMU test to fail gracefully
 
 echo "=========================================="
 echo "xv6-labs-2025 Quick Start Setup"
@@ -26,7 +26,7 @@ fi
 
 # Update package lists
 echo "Step 1: Updating package lists..."
-sudo apt-get update
+sudo apt-get update || { echo "Failed to update package lists"; exit 1; }
 
 # Install required packages
 echo "Step 2: Installing required packages..."
@@ -36,7 +36,7 @@ sudo apt-get install -y \
     gdb-multiarch \
     qemu-system-riscv \
     gcc-riscv64-linux-gnu \
-    binutils-riscv64-linux-gnu
+    binutils-riscv64-linux-gnu || { echo "Failed to install packages"; exit 1; }
 
 # Verify installations
 echo "Step 3: Verifying installations..."
@@ -64,19 +64,38 @@ fi
 
 echo ""
 echo "Step 5: Building xv6 kernel..."
-make clean
-make
+make clean || { echo "Build clean failed"; exit 1; }
+make || { echo "Build failed"; exit 1; }
 
 echo ""
 echo "Step 6: Testing xv6 with QEMU (10 second timeout)..."
 echo "The kernel should boot and show 'xv6 kernel is booting' message."
 echo ""
 
-# Run QEMU with timeout to test boot
-timeout 10 make qemu || true
+# Run QEMU with timeout to test boot, capture output
+timeout 10 make qemu > /tmp/xv6_test_output.txt 2>&1 || true
+
+# Small delay to ensure QEMU has fully terminated
+sleep 1
+
 echo ""
 echo "QEMU test completed (timed out after 10 seconds - this is expected)"
-echo "If you saw 'xv6 kernel is booting' above, the installation is successful!"
+
+# Check if kernel booted successfully
+if grep -q "xv6 kernel is booting" /tmp/xv6_test_output.txt; then
+    echo "✓ Installation successful! Kernel booted properly."
+    echo ""
+    echo "Boot output preview:"
+    head -n 5 /tmp/xv6_test_output.txt
+else
+    echo "⚠ Warning: Kernel may not have booted successfully."
+    echo "This could be due to QEMU compatibility issues."
+    echo "The build completed successfully, so the toolchain is installed correctly."
+    echo "You can manually test with: cd $REPO_DIR && make qemu"
+fi
+
+# Clean up
+rm -f /tmp/xv6_test_output.txt
 
 echo ""
 echo "=========================================="
