@@ -1,8 +1,10 @@
+# xv6
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
 
-ACKNOWLEDGMENTS
+## Acknowledgments
 
 xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
 to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
@@ -33,14 +35,14 @@ Amane Uehara, Pablo Ventura, Luc Videau, Xi Wang, WaheedHafez, Keiichi
 Watanabe, Lucas Wolf, Nicolas Wolovick, wxdao, Grant Wu, x653, Andy
 Zhang, Jindong Zhang, Icenowy Zheng, ZhUyU1997, and Zou Chang Wei.
 
-ERROR REPORTS
+## Error Reports
 
 Please send errors and suggestions to Frans Kaashoek and Robert Morris
 (kaashoek,rtm@mit.edu).  The main purpose of xv6 is as a teaching
 operating system for MIT's 6.1810, so we are more interested in
 simplifications and clarifications than new features.
 
-QUICK START
+## Quick Start
 
 For automated installation and setup, use the quick start script:
 
@@ -58,7 +60,7 @@ This script will:
 
 For manual installation instructions, see the detailed setup guide in the repository.
 
-BUILDING AND RUNNING XV6
+## Building and Running xv6
 
 You will need a RISC-V "newlib" tool chain from
 https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
