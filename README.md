@@ -47,7 +47,7 @@ simplifications and clarifications than new features.
 For automated installation and setup, use the quick start script:
 
 ```bash
-curl -sSL https://gist.githubusercontent.com/TVKain/10cc2eae8f947e0fa578f5599f920301/raw/75737defac0841e5ee515f561b5f1a304a2e33d6/quickstart.sh | bash
+curl -sSL https://raw.githubusercontent.com/TVKain/xv6-labs-2025/refs/heads/util/quickstart.sh | bash
 ```
 
 This script will:
