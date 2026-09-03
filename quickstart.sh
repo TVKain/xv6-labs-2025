@@ -73,10 +73,19 @@ echo "The kernel should boot and show 'xv6 kernel is booting' message."
 echo ""
 
 # Run QEMU with timeout to test boot, capture output
-timeout 10 make qemu > /tmp/xv6_test_output.txt 2>&1 || true
+echo "Starting QEMU test (this will take 10 seconds)..."
+timeout 10 make qemu > /tmp/xv6_test_output.txt 2>&1 &
+QEMU_PID=$!
 
-# Small delay to ensure QEMU has fully terminated
-sleep 1
+# Wait for timeout to complete
+sleep 11
+
+# Check if QEMU process is still running
+if ps -p $QEMU_PID > /dev/null; then
+    echo "QEMU is still running, killing it..."
+    kill $QEMU_PID 2>/dev/null || true
+    sleep 1
+fi
 
 echo ""
 echo "QEMU test completed (timed out after 10 seconds - this is expected)"
